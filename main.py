@@ -26,9 +26,20 @@ import os
 import requests
 from selenium.webdriver.common.action_chains import ActionChains
 
-os.environ['AWS_ACCESS_KEY_ID'] = ''
-os.environ['AWS_SECRET_ACCESS_KEY'] = ''
-os.environ['AWS_DEFAULT_REGION'] = ''  # e.g., 'us-west-2'
+with open('config.env', 'r') as file:
+    lines = file.readlines()
+
+# Extract the values
+values = {}
+for line in lines:
+    key, value = line.strip().split(' = ')
+    # Remove the surrounding quotes
+    value = value.strip('"')
+    values[key] = value
+
+os.environ['AWS_ACCESS_KEY_ID'] = values.get('first')
+os.environ['AWS_SECRET_ACCESS_KEY'] = values.get('second')
+os.environ['AWS_DEFAULT_REGION'] = values.get('third')  # e.g., 'us-west-2'
 
 app = Flask(__name__)
 CORS(app)
